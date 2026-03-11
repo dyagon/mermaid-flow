@@ -1,27 +1,44 @@
 import { memo } from 'react';
 import { Handle, Position, NodeProps } from '@xyflow/react';
 
+import { defaultTheme } from '../features/themes';
+
 interface NodeLabelData {
   label: string;
   description?: string;
 }
 
 function NodeLabel({ data }: NodeProps & { data: NodeLabelData }) {
+  const { fontFamily, node, label: labelStyle, description: descStyle, handle: handleStyle } = defaultTheme;
+
   return (
     <div style={{
-      padding: '12px 16px',
-      borderRadius: '8px',
-      background: '#fff',
-      border: '2px solid #4a90d9',
-      minWidth: '140px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      padding: node.padding,
+      borderRadius: `${node.borderRadius}px`,
+      background: node.background,
+      border: `${node.borderWidth}px solid ${node.borderColor}`,
+      minWidth: node.minWidth,
+      boxShadow: node.boxShadow,
+      fontFamily,
     }}>
-      <Handle type="target" position={Position.Top} style={{ background: '#4a90d9' }} />
-      <div style={{ fontWeight: 600, fontSize: '14px', color: '#333' }}>{data.label}</div>
+      <Handle type="target" position={Position.Top} style={{ background: handleStyle.color }} />
+      <div style={{
+        fontWeight: labelStyle.fontWeight,
+        fontSize: labelStyle.fontSize,
+        color: labelStyle.color,
+      }}>
+        {data.label}
+      </div>
       {data.description && (
-        <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>{data.description}</div>
+        <div style={{
+          fontSize: descStyle.fontSize,
+          color: descStyle.color,
+          marginTop: descStyle.marginTop,
+        }}>
+          {data.description}
+        </div>
       )}
-      <Handle type="source" position={Position.Bottom} style={{ background: '#4a90d9' }} />
+      <Handle type="source" position={Position.Bottom} style={{ background: handleStyle.color }} />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import {
   ReactFlow,
   Background,
@@ -10,6 +10,7 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 
+import { defaultTheme } from "../features/themes";
 import NodeLabel from "./NodeLabel";
 
 interface FlowChartProps {
@@ -38,11 +39,22 @@ export default function FlowChart({
     [onNodeDragStop],
   );
 
+  // Apply edge styling from theme
+  const styledEdges = useMemo(() => {
+    return edges.map(edge => ({
+      ...edge,
+      style: {
+        stroke: defaultTheme.edge.strokeColor,
+        strokeWidth: defaultTheme.edge.strokeWidth,
+      },
+    }));
+  }, [edges]);
+
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <ReactFlow
         nodes={nodes}
-        edges={edges}
+        edges={styledEdges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onNodeDragStop={handleNodeDragStop}
