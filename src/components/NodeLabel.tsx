@@ -11,30 +11,36 @@ interface NodeLabelData {
 function NodeLabel({ data }: NodeProps & { data: NodeLabelData }) {
   const { fontFamily, node, label: labelStyle, description: descStyle, handle: handleStyle } = defaultTheme;
 
+  const containerStyle: React.CSSProperties = {
+    padding: node.padding,
+    borderRadius: `${node.borderRadius}px`,
+    background: node.background,
+    border: `${node.borderWidth}px solid ${node.borderColor}`,
+    minWidth: node.minWidth,
+    boxShadow: node.boxShadow,
+    fontFamily,
+  };
+
+  const labelStyleCombined: React.CSSProperties = {
+    fontWeight: labelStyle.fontWeight,
+    fontSize: labelStyle.fontSize,
+    color: labelStyle.color,
+  };
+
+  const descStyleCombined: React.CSSProperties = {
+    fontSize: descStyle.fontSize,
+    color: descStyle.color,
+    marginTop: descStyle.marginTop,
+  };
+
   return (
-    <div style={{
-      padding: node.padding,
-      borderRadius: `${node.borderRadius}px`,
-      background: node.background,
-      border: `${node.borderWidth}px solid ${node.borderColor}`,
-      minWidth: node.minWidth,
-      boxShadow: node.boxShadow,
-      fontFamily,
-    }}>
+    <div style={containerStyle}>
       <Handle type="target" position={Position.Top} style={{ background: handleStyle.color }} />
-      <div style={{
-        fontWeight: labelStyle.fontWeight,
-        fontSize: labelStyle.fontSize,
-        color: labelStyle.color,
-      }}>
+      <div style={labelStyleCombined}>
         {data.label}
       </div>
       {data.description && (
-        <div style={{
-          fontSize: descStyle.fontSize,
-          color: descStyle.color,
-          marginTop: descStyle.marginTop,
-        }}>
+        <div style={descStyleCombined}>
           {data.description}
         </div>
       )}

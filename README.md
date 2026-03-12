@@ -24,6 +24,15 @@ Component(id, "Label", "Technology", "Description")
 Rel(source, target, "Label")
 ```
 
+## Fonts
+
+- LXGW WenKai
+- Yozai
+
+https://fonts.google.com/specimen/LXGW+WenKai+Mono+TC
+
+https://github.com/lxgw/LxgwWenKai
+
 ## Quick Start
 
 ```bash
