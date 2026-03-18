@@ -12,6 +12,7 @@ const styles: Record<string, React.CSSProperties> = {
     position: 'relative',
     padding: '16px 20px',
     minWidth: 140,
+    maxWidth: 300,
   },
   cylinder: {
     width: 80,
@@ -44,12 +45,14 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     fontSize: 14,
     color: '#333',
+    overflowWrap: 'anywhere',
   },
   description: {
     textAlign: 'center',
     fontSize: 12,
     color: '#666',
     marginTop: 4,
+    overflowWrap: 'anywhere',
   },
   handle: {
     background: '#8b5cf6',
@@ -57,9 +60,16 @@ const styles: Record<string, React.CSSProperties> = {
 };
 
 function ContainerDbNode({ data }: NodeProps & { data: NodeData }) {
+  const positions = [Position.Top, Position.Right, Position.Bottom, Position.Left];
+
   return (
     <div style={styles.container}>
-      <Handle type="target" position={Position.Top} style={styles.handle} />
+      {positions.map((position) => (
+        <Handle key={`t-${position}`} id={`t-${position}`} type="target" position={position} style={styles.handle} />
+      ))}
+      {positions.map((position) => (
+        <Handle key={`s-${position}`} id={`s-${position}`} type="source" position={position} style={styles.handle} />
+      ))}
       <div style={styles.cylinder}>
         <div style={{ ...styles.ellipse, top: 0 }} />
         <div style={{ ...styles.ellipse, bottom: 0 }} />
@@ -73,7 +83,6 @@ function ContainerDbNode({ data }: NodeProps & { data: NodeData }) {
           {data.description}
         </div>
       )}
-      <Handle type="source" position={Position.Bottom} style={styles.handle} />
     </div>
   );
 }

@@ -31,7 +31,62 @@ interface ParsedElement {
 }
 
 // Match: Type(params)
-const NODE_PATTERN = new RegExp(/^(\w+)\((.*)\)?$/);
+const NODE_PATTERN = new RegExp(/^(\w+)\((.*)\)[^)]*$/);
+
+function buildStatements(input: string): string[] {
+  const statements: string[] = [];
+  const rawLines = input.split('\n');
+
+  let buffer = '';
+  let inQuotes = false;
+  let quoteChar = '';
+  let parenDepth = 0;
+
+  for (const rawLine of rawLines) {
+    const line = rawLine.trim();
+    if (!line) continue;
+
+    if (line === '}' && !buffer) {
+      statements.push(line);
+      continue;
+    }
+
+    buffer = buffer ? `${buffer} ${line}` : line;
+
+    for (const char of line) {
+      if ((char === '"' || char === "'") && !inQuotes) {
+        inQuotes = true;
+        quoteChar = char;
+        continue;
+      }
+
+      if (char === quoteChar && inQuotes) {
+        inQuotes = false;
+        quoteChar = '';
+        continue;
+      }
+
+      if (!inQuotes) {
+        if (char === '(') {
+          parenDepth++;
+        } else if (char === ')') {
+          parenDepth = Math.max(0, parenDepth - 1);
+        }
+      }
+    }
+
+    if (!inQuotes && parenDepth === 0) {
+      statements.push(buffer);
+      buffer = '';
+    }
+  }
+
+  if (buffer) {
+    statements.push(buffer);
+  }
+
+  return statements;
+}
 
 
 function splitParams(paramsStr: string): string[] {
@@ -140,7 +195,7 @@ function buildElement(element: ParsedElement, context: { boundaryId?: string; re
 
 // Main parse function
 export function parseC4(input: string): ParseResult {
-  const lines = input.split('\n').map(line => line.trim()).filter(Boolean);
+  const lines = buildStatements(input);
 
   if (lines.length === 0) {
     return { success: true, diagram: { nodes: [], edges: [], boundaries: [] } };

@@ -15,6 +15,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: '#fef3c7',
     border: '2px solid #f59e0b',
     minWidth: 140,
+    maxWidth: 300,
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
     textAlign: 'center',
   },
@@ -22,16 +23,19 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     fontSize: 14,
     color: '#333',
+    overflowWrap: 'anywhere',
   },
   technology: {
     fontSize: 11,
     color: '#92400e',
     marginTop: 2,
+    overflowWrap: 'anywhere',
   },
   description: {
     fontSize: 12,
     color: '#666',
     marginTop: 4,
+    overflowWrap: 'anywhere',
   },
   handle: {
     background: '#f59e0b',
@@ -39,9 +43,16 @@ const styles: Record<string, React.CSSProperties> = {
 };
 
 function ContainerNode({ data }: NodeProps & { data: NodeData }) {
+  const positions = [Position.Top, Position.Right, Position.Bottom, Position.Left];
+
   return (
     <div style={styles.container}>
-      <Handle type="target" position={Position.Top} style={styles.handle} />
+      {positions.map((position) => (
+        <Handle key={`t-${position}`} id={`t-${position}`} type="target" position={position} style={styles.handle} />
+      ))}
+      {positions.map((position) => (
+        <Handle key={`s-${position}`} id={`s-${position}`} type="source" position={position} style={styles.handle} />
+      ))}
       <div style={styles.label}>{data.label}</div>
       {data.technology && (
         <div style={styles.technology}>{data.technology}</div>
@@ -49,7 +60,6 @@ function ContainerNode({ data }: NodeProps & { data: NodeData }) {
       {data.description && (
         <div style={styles.description}>{data.description}</div>
       )}
-      <Handle type="source" position={Position.Bottom} style={styles.handle} />
     </div>
   );
 }

@@ -14,6 +14,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: '#ffffff',
     border: '2px solid #10b981',
     minWidth: 140,
+    maxWidth: 300,
     boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
     display: 'flex',
     alignItems: 'center',
@@ -23,10 +24,12 @@ const styles: Record<string, React.CSSProperties> = {
     fontWeight: 600,
     fontSize: 14,
     color: '#333',
+    overflowWrap: 'anywhere',
   },
   description: {
     fontSize: 12,
     color: '#666',
+    overflowWrap: 'anywhere',
   },
   handle: {
     background: '#10b981',
@@ -39,9 +42,16 @@ const styles: Record<string, React.CSSProperties> = {
 };
 
 function PersonNode({ data }: NodeProps & { data: NodeData }) {
+  const positions = [Position.Top, Position.Right, Position.Bottom, Position.Left];
+
   return (
     <div style={styles.container}>
-      <Handle type="target" position={Position.Top} style={styles.handle} />
+      {positions.map((position) => (
+        <Handle key={`t-${position}`} id={`t-${position}`} type="target" position={position} style={styles.handle} />
+      ))}
+      {positions.map((position) => (
+        <Handle key={`s-${position}`} id={`s-${position}`} type="source" position={position} style={styles.handle} />
+      ))}
       <svg style={styles.icon} viewBox="0 0 24 24" fill="none" strokeWidth="2">
         <circle cx="12" cy="8" r="4" />
         <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
@@ -52,7 +62,6 @@ function PersonNode({ data }: NodeProps & { data: NodeData }) {
           <div style={styles.description}>{data.description}</div>
         )}
       </div>
-      <Handle type="source" position={Position.Bottom} style={styles.handle} />
     </div>
   );
 }
