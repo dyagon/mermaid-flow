@@ -23,7 +23,7 @@ const styles: Record<string, React.CSSProperties> = {
     transform: 'translateX(-50%)',
     backgroundColor: '#fff',
     padding: '2px 8px',
-    fontSize: 12,
+    fontSize: 14,
     fontWeight: 600,
     whiteSpace: 'nowrap' as const,
     textAlign: 'center' as const,

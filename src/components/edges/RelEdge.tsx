@@ -6,7 +6,7 @@ const styles: Record<string, React.CSSProperties> = {
     backgroundColor: '#fff',
     padding: '2px 6px',
     borderRadius: 4,
-    fontSize: 11,
+    fontSize: 13,
     border: '1px solid #ddd',
     maxWidth: 220,
     whiteSpace: 'normal' as const,
@@ -15,7 +15,7 @@ const styles: Record<string, React.CSSProperties> = {
     textAlign: 'center' as const,
   },
   protocol: {
-    fontSize: 10,
+    fontSize: 12,
     color: '#888',
     marginTop: 2,
   },
@@ -27,8 +27,6 @@ function RelEdge({
   sourceY,
   targetX,
   targetY,
-  sourcePosition,
-  targetPosition,
   data,
   label,
   markerEnd,
@@ -36,10 +34,8 @@ function RelEdge({
   const [edgePath, labelX, labelY] = getStraightPath({
     sourceX,
     sourceY,
-    sourcePosition,
     targetX,
     targetY,
-    targetPosition,
   });
 
   const relLabel = (data?.label as string) || (label as string | undefined) || '';

@@ -15,18 +15,18 @@ const styles: Record<string, React.CSSProperties> = {
   },
   label: {
     fontWeight: 600,
-    fontSize: 14,
+    fontSize: 16,
     color: '#333',
     overflowWrap: 'anywhere',
   },
   technology: {
-    fontSize: 11,
+    fontSize: 13,
     color: '#92400e',
     marginTop: 2,
     overflowWrap: 'anywhere',
   },
   description: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#666',
     marginTop: 4,
     overflowWrap: 'anywhere',

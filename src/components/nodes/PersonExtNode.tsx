@@ -17,12 +17,12 @@ const styles: Record<string, React.CSSProperties> = {
   },
   label: {
     fontWeight: 600,
-    fontSize: 14,
+    fontSize: 16,
     color: '#333',
     overflowWrap: 'anywhere',
   },
   description: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#666',
     overflowWrap: 'anywhere',
   },

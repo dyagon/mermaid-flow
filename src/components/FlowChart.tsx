@@ -56,7 +56,7 @@ const styles: Record<string, React.CSSProperties> = {
     color: '#f9fafb',
     padding: '8px 10px',
     borderRadius: 8,
-    fontSize: 12,
+    fontSize: 14,
     lineHeight: 1.4,
     fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
     pointerEvents: 'none',
