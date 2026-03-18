@@ -1,11 +1,6 @@
 import { memo } from 'react';
-import { Handle, Position, NodeProps } from '@xyflow/react';
-
-interface NodeData {
-  label: string;
-  description?: string;
-  elementType?: string;
-}
+import { NodeProps } from '@xyflow/react';
+import BaseCardNode, { BaseCardNodeData } from '../base/BaseCardNode';
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
@@ -35,23 +30,8 @@ const styles: Record<string, React.CSSProperties> = {
   },
 };
 
-function SystemExtNode({ data }: NodeProps & { data: NodeData }) {
-  const positions = [Position.Top, Position.Right, Position.Bottom, Position.Left];
-
-  return (
-    <div style={styles.container}>
-      {positions.map((position) => (
-        <Handle key={`t-${position}`} id={`t-${position}`} type="target" position={position} style={styles.handle} />
-      ))}
-      {positions.map((position) => (
-        <Handle key={`s-${position}`} id={`s-${position}`} type="source" position={position} style={styles.handle} />
-      ))}
-      <div style={styles.label}>{data.label}</div>
-      {data.description && (
-        <div style={styles.description}>{data.description}</div>
-      )}
-    </div>
-  );
+function SystemExtNode({ data }: NodeProps & { data: BaseCardNodeData }) {
+  return <BaseCardNode data={data} containerStyle={styles.container} labelStyle={styles.label} descriptionStyle={styles.description} handleStyle={styles.handle} />;
 }
 
 export default memo(SystemExtNode);

@@ -1,11 +1,6 @@
 import { memo } from 'react';
-import { Handle, Position, NodeProps } from '@xyflow/react';
-
-interface NodeData {
-  label: string;
-  description?: string;
-  elementType?: string;
-}
+import { NodeProps } from '@xyflow/react';
+import BaseCardNode, { BaseCardNodeData } from '../base/BaseCardNode';
 
 const styles: Record<string, React.CSSProperties> = {
   container: {
@@ -39,30 +34,28 @@ const styles: Record<string, React.CSSProperties> = {
     height: 24,
     stroke: '#10b981',
   },
+  content: {
+    flex: 1,
+    minWidth: 0,
+  },
 };
 
-function PersonExtNode({ data }: NodeProps & { data: NodeData }) {
-  const positions = [Position.Top, Position.Right, Position.Bottom, Position.Left];
-
+function PersonExtNode({ data }: NodeProps & { data: BaseCardNodeData }) {
   return (
-    <div style={styles.container}>
-      {positions.map((position) => (
-        <Handle key={`t-${position}`} id={`t-${position}`} type="target" position={position} style={styles.handle} />
-      ))}
-      {positions.map((position) => (
-        <Handle key={`s-${position}`} id={`s-${position}`} type="source" position={position} style={styles.handle} />
-      ))}
-      <svg style={{ ...styles.icon, strokeDasharray: '4 2' }} viewBox="0 0 24 24" fill="none" strokeWidth="2">
-        <circle cx="12" cy="8" r="4" />
-        <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
-      </svg>
-      <div>
-        <div style={styles.label}>{data.label}</div>
-        {data.description && (
-          <div style={styles.description}>{data.description}</div>
-        )}
-      </div>
-    </div>
+    <BaseCardNode
+      data={data}
+      containerStyle={styles.container}
+      labelStyle={styles.label}
+      descriptionStyle={styles.description}
+      handleStyle={styles.handle}
+      contentStyle={styles.content}
+      leading={(
+        <svg style={{ ...styles.icon, strokeDasharray: '4 2' }} viewBox="0 0 24 24" fill="none" strokeWidth="2">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 20c0-4 4-6 8-6s8 2 8 6" />
+        </svg>
+      )}
+    />
   );
 }
 

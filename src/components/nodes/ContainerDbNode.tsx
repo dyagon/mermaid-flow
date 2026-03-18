@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { Handle, Position, NodeProps } from '@xyflow/react';
+import { NodeProps } from '@xyflow/react';
+import DirectionalHandles from '../base/DirectionalHandles';
 
 interface NodeData {
   label: string;
@@ -60,16 +61,9 @@ const styles: Record<string, React.CSSProperties> = {
 };
 
 function ContainerDbNode({ data }: NodeProps & { data: NodeData }) {
-  const positions = [Position.Top, Position.Right, Position.Bottom, Position.Left];
-
   return (
     <div style={styles.container}>
-      {positions.map((position) => (
-        <Handle key={`t-${position}`} id={`t-${position}`} type="target" position={position} style={styles.handle} />
-      ))}
-      {positions.map((position) => (
-        <Handle key={`s-${position}`} id={`s-${position}`} type="source" position={position} style={styles.handle} />
-      ))}
+      <DirectionalHandles style={styles.handle} />
       <div style={styles.cylinder}>
         <div style={{ ...styles.ellipse, top: 0 }} />
         <div style={{ ...styles.ellipse, bottom: 0 }} />

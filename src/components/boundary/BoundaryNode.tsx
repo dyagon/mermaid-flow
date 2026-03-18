@@ -19,12 +19,14 @@ const styles: Record<string, React.CSSProperties> = {
   label: {
     position: 'absolute' as const,
     top: -24,
-    left: 8,
+    left: '50%',
+    transform: 'translateX(-50%)',
     backgroundColor: '#fff',
     padding: '2px 8px',
     fontSize: 12,
     fontWeight: 600,
     whiteSpace: 'nowrap' as const,
+    textAlign: 'center' as const,
   },
 };
 

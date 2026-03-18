@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { EdgeProps, getBezierPath, EdgeLabelRenderer } from '@xyflow/react';
+import { EdgeProps, getStraightPath, EdgeLabelRenderer } from '@xyflow/react';
 
 const styles: Record<string, React.CSSProperties> = {
   label: {
@@ -8,6 +8,11 @@ const styles: Record<string, React.CSSProperties> = {
     borderRadius: 4,
     fontSize: 11,
     border: '1px solid #ddd',
+    maxWidth: 220,
+    whiteSpace: 'normal' as const,
+    overflowWrap: 'anywhere',
+    wordBreak: 'break-word' as const,
+    textAlign: 'center' as const,
   },
   protocol: {
     fontSize: 10,
@@ -28,7 +33,7 @@ function RelEdge({
   label,
   markerEnd,
 }: EdgeProps) {
-  const [edgePath, labelX, labelY] = getBezierPath({
+  const [edgePath, labelX, labelY] = getStraightPath({
     sourceX,
     sourceY,
     sourcePosition,
@@ -47,6 +52,7 @@ function RelEdge({
         style={{
           strokeWidth: 2,
           stroke: '#999',
+          strokeDasharray: '6 4',
         }}
         className="react-flow__edge-path"
         d={edgePath}

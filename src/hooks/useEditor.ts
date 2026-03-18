@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from 'react';
-import { Node, Edge, NodeChange, EdgeChange, Position, applyNodeChanges, applyEdgeChanges } from '@xyflow/react';
+import { Node, Edge, NodeChange, EdgeChange, Position, MarkerType, applyNodeChanges, applyEdgeChanges } from '@xyflow/react';
 
 import { useEditorStore } from '../store/editorStore';
 import { parseC4 } from '../features/c4Parser';
@@ -76,6 +76,33 @@ function getTargetHandleId(position: Position): string {
     default:
       return 't-top';
   }
+}
+
+function recalculateEdgeAnchors(nodes: Node[], edges: Edge[]): Edge[] {
+  const nodeMap = new Map(nodes.map((node) => [node.id, node]));
+
+  return edges.map((edge) => {
+    const sourceNode = nodeMap.get(edge.source);
+    const targetNode = nodeMap.get(edge.target);
+
+    if (!sourceNode || !targetNode) {
+      return edge;
+    }
+
+    const anchors = getAnchorPositions(sourceNode, targetNode);
+    const sourceHandle = getSourceHandleId(anchors.sourcePosition);
+    const targetHandle = getTargetHandleId(anchors.targetPosition);
+
+    if (edge.sourceHandle === sourceHandle && edge.targetHandle === targetHandle) {
+      return edge;
+    }
+
+    return {
+      ...edge,
+      sourceHandle,
+      targetHandle,
+    };
+  });
 }
 
 function calculateInitialPositions(
@@ -270,6 +297,7 @@ function parseMermaidCode(
       target: rel.target,
       sourceHandle: getSourceHandleId(anchors.sourcePosition),
       targetHandle: getTargetHandleId(anchors.targetPosition),
+      markerEnd: rel.relType === 'Rel' ? { type: MarkerType.ArrowClosed } : undefined,
       label: rel.label,
       type: 'straight',
       data: {
@@ -304,7 +332,9 @@ function edgesEqual(a: Edge[], b: Edge[]): boolean {
     return (
       edge.id === other.id &&
       edge.source === other.source &&
-      edge.target === other.target
+      edge.target === other.target &&
+      edge.sourceHandle === other.sourceHandle &&
+      edge.targetHandle === other.targetHandle
     );
   });
 }
@@ -343,8 +373,14 @@ export function useEditor() {
   }, [store]);
 
   const onNodesChange = useCallback((changes: NodeChange[]) => {
-    store.setNodes(applyNodeChanges(changes, store.nodes) as Node[]);
-  }, [store.nodes, store.setNodes]);
+    const nextNodes = applyNodeChanges(changes, store.nodes) as Node[];
+    store.setNodes(nextNodes);
+
+    const nextEdges = recalculateEdgeAnchors(nextNodes, store.edges);
+    if (!edgesEqual(store.edges, nextEdges)) {
+      store.setEdges(nextEdges);
+    }
+  }, [store.nodes, store.edges, store.setNodes, store.setEdges]);
 
   const onEdgesChange = useCallback((changes: EdgeChange[]) => {
     store.setEdges(applyEdgeChanges(changes, store.edges) as Edge[]);
